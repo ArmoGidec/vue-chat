@@ -8,7 +8,8 @@ const store = new Vuex.Store({
     state: {
         users: [],
         user: null,
-        chat: []
+        chat: [],
+        dialog: null
     },
     mutations: {
         SET_USERS(state, payload) {
@@ -19,6 +20,9 @@ const store = new Vuex.Store({
         },
         SET_CHAT(state, payload) {
             state.chat = payload;
+        },
+        SET_DIALOG(state, payload) {
+            state.dialog = payload;
         }
     },
     actions: {
@@ -33,12 +37,20 @@ const store = new Vuex.Store({
         async getChat({ commit }) {
             const chat = (await api.get('/chat')).data;
             commit('SET_CHAT', chat);
+        },
+        async getDialog({ commit }, dialogId) {
+            const dialog = (await api.get(`/chat/${dialogId}`)).data;
+            commit('SET_DIALOG', dialog);
+        },
+        removeDialog({ commit }) {
+            commit('SET_DIALOG', null);
         }
     },
     getters: {
         users: ({ users }) => users,
         user: ({ user }) => user,
-        chat: ({ chat }) => chat
+        chat: ({ chat }) => chat,
+        dialog: ({ dialog }) => dialog,
     }
 });
 

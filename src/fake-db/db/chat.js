@@ -63,3 +63,8 @@ mock.onGet('/api/chat').reply(() => [
         };
     })
 ]);
+
+mock.onGet(/\/api\/chat\/\w+/).reply(config => {
+    const id = config.url.replace('/chat/', '');
+    return [200, chatDb.find(chat => chat.id === id)];
+});

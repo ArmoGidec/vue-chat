@@ -4,6 +4,7 @@
             <ChatList :chats="chat" />
         </nav>
         <main class="chat__dialog">
+            <router-view></router-view>
         </main>
     </div>
 </template>
@@ -28,6 +29,7 @@ export default {
     max-height: 100vh;
     height: 720px;
 
+    margin: 0 auto;
     display: flex;
 
     &__sidebar {

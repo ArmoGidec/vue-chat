@@ -1,11 +1,17 @@
 <template>
     <div class="chat-list">
         <div class="chat-list__title">
-            Сообщения <span class="chat-list__counter">{{ chats.length || '' }}</span>
+            Сообщения
+            <span class="chat-list__counter">{{ chats.length || '' }}</span>
         </div>
         <ul class="chat-list__list">
             <li class="chat-list__item" v-for="chat in chats" :key="chat.id">
-                <ChatItem :item="chat" />
+                <router-link
+                    :to="{ name: 'dialog', params: { dialogId: chat.id } }"
+                    class="chat-list__link"
+                >
+                    <ChatItem :item="chat" />
+                </router-link>
             </li>
         </ul>
     </div>
@@ -34,12 +40,12 @@ export default {
 
     &__title {
         padding: 24px 20px;
-        color: #656B77;
+        color: #656b77;
     }
 
     &__counter {
         margin-left: 10px;
-        color: #D2D8DE;
+        color: #d2d8de;
     }
 
     &__list {
@@ -50,13 +56,21 @@ export default {
         overflow-y: auto;
     }
 
-    &__item {
-        padding: 22px 20px 11px 23px;
-    }
-
     &__title,
     &__item {
         border-bottom: 2px solid #e9edf2;
+    }
+
+    &__link {
+        display: block;
+        text-decoration: none;
+        padding: 22px 20px 11px 21px;
+        border-left: 2px solid transparent;
+
+        &.router-link-active {
+            background-color: #fff;
+            border-left-color: #398BFF;
+        }
     }
 }
 </style>
