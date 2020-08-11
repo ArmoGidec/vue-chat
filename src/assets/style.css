@@ -1,0 +1,9 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'TT Norms';
+    font-size: 14px;
+    line-height: 141.62%;
+}
