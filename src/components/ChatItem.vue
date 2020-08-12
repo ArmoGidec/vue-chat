@@ -4,7 +4,7 @@
             {{ item.subject }} <span class="chat-item__created-mark">{{ item.created | toDateString }}</span>
         </div>
         <p class="chat-item__message">
-            {{ item.part }}
+            {{ item.part | truncate(100) }}
         </p>
     </div>
 </template>

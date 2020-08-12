@@ -22,6 +22,10 @@ Vue.filter('toDateString', value => {
     return formatter.format(date).replace('г.', '');
 });
 
+Vue.filter('truncate', (text = '', length = 30) =>
+    text.length > length ? text.slice(0, length) + '...' : text
+);
+
 new Vue({
     store,
     router,
