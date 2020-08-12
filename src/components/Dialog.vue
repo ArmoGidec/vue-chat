@@ -10,13 +10,13 @@
                 />
             </div>
             <form @submit.prevent="sendMsg" class="dialog__form">
-                <div class="dialog__input-wrapper">
-                    <Textarea
-                        class="dialog__input"
-                        placeholder="Введите текст..."
-                        v-model="form.text"
-                    ></Textarea>
-                </div>
+                <Textarea
+                    class="dialog__input"
+                    placeholder="Введите текст..."
+                    v-model="form.text"
+                    :valid="form.valid"
+                    :disabled="sending"
+                ></Textarea>
                 <button class="dialog__btn" type="submit" :disabled="sending">
                     <img src="/icons/vector.png" alt="send" v-if="!sending" />
                     <Loader v-else size="50" color="white" />
@@ -32,7 +32,8 @@ export default {
     name: 'Dialog',
     data: () => ({
         form: {
-            text: ''
+            text: '',
+            valid: true
         },
         sending: false
     }),
@@ -40,10 +41,22 @@ export default {
         ...mapGetters(['dialog', 'user', 'users'])
     },
     methods: {
-        ...mapActions(['getDialog', 'removeDialog']),
+        ...mapActions(['getDialog', 'removeDialog', 'sendMessage']),
         async sendMsg() {
+            const form = { ...this.form };
+            if (form.text === '') {
+                form.valid = false;
+                return;
+            }
             this.sending = true;
-            await this.getDialog(this.$route.params.dialogId);
+            this.form.text = '';
+
+            const dialogId = this.$route.params.dialogId;
+            await this.sendMessage({
+                dialogId,
+                message: form.text,
+                author: this.user.id
+            });
             this.sending = false;
         }
     },
@@ -82,11 +95,11 @@ export default {
     }
 
     &__messages,
-    &__input-wrapper {
+    &__input {
         flex: 1;
     }
 
-    &__input-wrapper {
+    &__input {
         padding-left: 33px;
     }
 

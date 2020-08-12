@@ -12,8 +12,7 @@
                 :key="message.id"
             >
                 <div class="message">
-                    <div class="message__text">
-                        {{ message.text }}
+                    <div class="message__text" v-html="$options.linebreaks(message.text)">
                     </div>
                     <div class="message__author">
                         {{ message.author.name }}
@@ -57,7 +56,8 @@ export default {
                 side: isUser ? 'messages__item--right' : ''
             };
         });
-    }
+    },
+    linebreaks: (text) => text.replace('\n', '<br />')
 };
 </script>
 
@@ -76,7 +76,8 @@ export default {
         padding: 0;
 
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     &__item {

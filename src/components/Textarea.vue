@@ -7,7 +7,7 @@
     >
         <div
             class="textarea__input"
-            contenteditable="true"
+            :contenteditable="!$attrs.disabled"
             @input="input"
             ref="inputControl"
         ></div>
@@ -35,11 +35,14 @@ export default {
     }),
     methods: {
         input() {
-            this.$emit('input', this.$refs.inputControl.innerText);
+            const text = this.$refs.inputControl.innerText;
+            this.$emit('input', text.replace(/^\n$/, ''));
             this.calcPadding();
         },
         changeFocus() {
-            this.$refs.inputControl.focus();
+            if (!this.$attrs.disabled) {
+                this.$refs.inputControl.focus();
+            }
         },
         calcPadding() {
             const wrapperHeight = +(this.$refs.wrapper || {}).offsetHeight || 0;
@@ -50,11 +53,21 @@ export default {
                 wrapperHeight / 2 - inputControlHeight / 2,
                 0
             );
+        },
+        setText(text = '') {
+            this.$refs.inputControl.innerText = text;
+            this.calcPadding();
+        }
+    },
+    watch: {
+        value() {
+            if (this.$refs.inputControl.innerText !== this.value) {
+                this.$refs.inputControl.innerText = this.value;
+            }
         }
     },
     mounted() {
-        this.$refs.inputControl.innerText = this.value;
-        this.calcPadding();
+        this.setText(this.value);
     }
 };
 </script>
@@ -64,6 +77,11 @@ export default {
     height: 100%;
     overflow-y: auto;
     cursor: pointer;
+
+    &[disabled] {
+        background-color: #d6d6d6;
+        cursor: not-allowed;
+    }
 
     &,
     &__input {

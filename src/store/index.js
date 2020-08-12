@@ -23,6 +23,11 @@ const store = new Vuex.Store({
         },
         SET_DIALOG(state, payload) {
             state.dialog = payload;
+        },
+        ADD_MESSAGE(state, { dialogId, message }) {
+            if ((state.dialog && state.dialog.id) === dialogId) {
+                state.dialog.parts = state.dialog.parts.concat(message);
+            }
         }
     },
     actions: {
@@ -44,6 +49,16 @@ const store = new Vuex.Store({
         },
         removeDialog({ commit }) {
             commit('SET_DIALOG', null);
+        },
+        async sendMessage({ commit }, { dialogId, message, author }) {
+            const result = (await api.post(`/chat/${dialogId}`, {
+                message,
+                author
+            })).data
+
+            commit('ADD_MESSAGE', { dialogId, message: result });
+            
+            return result;
         }
     },
     getters: {

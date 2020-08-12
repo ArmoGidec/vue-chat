@@ -65,6 +65,24 @@ mock.onGet('/api/chat').reply(() => [
 ]);
 
 mock.onGet(/\/api\/chat\/\w+/).reply(config => {
-    const id = config.url.replace('/chat/', '');
-    return [200, chatDb.find(chat => chat.id === id)];
+    const chatId = config.url.replace('/chat/', '');
+    return [200, chatDb.find(({ id }) => id === chatId)];
+});
+
+mock.onPost(/\/api\/chat\/\w+/).reply(config => {
+    const chatId = config.url.replace('/chat/', '');
+    const index = chatDb.findIndex(({ id }) => id === chatId);
+    const parts = chatDb[index].parts;
+    
+    const { message, author } = JSON.parse(config.data);
+    const newChatId = parts.length + 1;
+    const created = new Date();
+    const part = {
+        text: message,
+        author,
+        id: newChatId,
+        created
+    };
+    chatDb[index].parts = parts.concat(part)
+    return [201, part];
 });
