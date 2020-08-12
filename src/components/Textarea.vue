@@ -11,11 +11,9 @@
             @input="input"
             ref="inputControl"
         ></div>
-        <div
-            class="textarea__placeholder"
-            :placeholder="placeholder"
-            v-show="!_value"
-        ></div>
+        <div class="textarea__placeholder" v-show="!value">
+            {{ placeholder }}
+        </div>
     </div>
 </template>
 
@@ -37,7 +35,8 @@ export default {
     }),
     methods: {
         input() {
-            this._value = this.$refs.inputControl.innerText;
+            this.$emit('input', this.$refs.inputControl.innerText);
+            this.calcPadding();
         },
         changeFocus() {
             this.$refs.inputControl.focus();
@@ -53,20 +52,9 @@ export default {
             );
         }
     },
-    computed: {
-        _value: {
-            get() {
-                return this.value;
-            },
-            set(val) {
-                this.calcPadding()
-                this.$emit('change', val);
-            }
-        },
-    },
     mounted() {
         this.$refs.inputControl.innerText = this.value;
-        this._value = this.value;
+        this.calcPadding();
     }
 };
 </script>
@@ -100,9 +88,7 @@ export default {
         z-index: -1;
         top: 50%;
         transform: translateY(-50%);
-        &::before {
-            content: attr(placeholder);
-        }
+        color: #7d8790;
     }
 }
 </style>

@@ -8,12 +8,11 @@
                     <Textarea
                         class="dialog__input"
                         placeholder="Введите текст..."
-                        :value="form.text"
-                        @change="change"
+                        v-model="form.text"
                     ></Textarea>
                 </div>
                 <button class="dialog__btn" type="submit" :disabled="sending">
-                    <img src="/icons/vector.png" alt="" v-if="!sending" />
+                    <img src="/icons/vector.png" alt="send" v-if="!sending" />
                     <Loader v-else size="50" color="white" />
                 </button>
             </form>
@@ -41,9 +40,6 @@ export default {
             await this.getDialog(this.$route.params.dialogId);
             this.sending = false;
         },
-        change(val) {
-            this.form.text = val.replace(/^\n$/, '');
-        }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
