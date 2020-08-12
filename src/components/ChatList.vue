@@ -4,7 +4,8 @@
             Сообщения
             <span class="chat-list__counter">{{ chats.length || '' }}</span>
         </div>
-        <ul class="chat-list__list">
+        <Loader v-if="loading" size="100" style="margin:0 auto;" />
+        <ul class="chat-list__list" v-else>
             <li class="chat-list__item" v-for="chat in chats" :key="chat.id">
                 <router-link
                     :to="{ name: 'dialog', params: { dialogId: chat.id } }"
@@ -26,8 +27,18 @@ export default {
             default: () => []
         }
     },
+    data: () => ({
+        loading: true
+    }),
+    created() {
+        const unwatch = this.$watch('chats', () => {
+            this.loading = false;
+            unwatch();
+        });
+    },
     components: {
-        ChatItem: () => import('./ChatItem.vue')
+        ChatItem: () => import('./ChatItem.vue'),
+        Loader: () => import('./Loader.vue')
     }
 };
 </script>
@@ -69,7 +80,7 @@ export default {
 
         &.router-link-active {
             background-color: #fff;
-            border-left-color: #398BFF;
+            border-left-color: #398bff;
         }
     }
 }
