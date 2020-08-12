@@ -4,11 +4,16 @@
         <template v-else>
             <div class="dialog__messages"></div>
             <form @submit.prevent="sendMsg" class="dialog__form">
-                <textarea class="dialog__input">
-                    Введите текст
-                </textarea>
+                <div class="dialog__input-wrapper">
+                    <Textarea
+                        class="dialog__input"
+                        placeholder="Введите текст..."
+                        :value="form.text"
+                        @change="change"
+                    ></Textarea>
+                </div>
                 <button class="dialog__btn" type="submit" :disabled="sending">
-                    <img src="icons/vector.svg" alt="" v-if="!sending" />
+                    <img src="/icons/vector.png" alt="" v-if="!sending" />
                     <Loader v-else size="50" color="white" />
                 </button>
             </form>
@@ -35,6 +40,9 @@ export default {
             this.sending = true;
             await this.getDialog(this.$route.params.dialogId);
             this.sending = false;
+        },
+        change(val) {
+            this.form.text = val.replace(/^\n$/, '');
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -49,7 +57,8 @@ export default {
         next();
     },
     components: {
-        Loader: () => import('./Loader.vue')
+        Loader: () => import('./Loader.vue'),
+        Textarea:() => import('./Textarea.vue')
     }
 };
 </script>
@@ -66,33 +75,32 @@ export default {
 
     &__form {
         border-top: 1px solid #e9edf2;
+        max-height: 80px;
     }
 
     &__messages,
-    &__input {
+    &__input-wrapper {
         flex: 1;
     }
 
-    &__input {
-        padding: 13px 33px;
-        border: none;
-        resize: none;
+    &__input-wrapper {
+        padding-left: 33px;
+    }
 
-        &::placeholder {
-            color: #7d8790;
-        }
+    &__btn, &__input {
+        border: none;
+        outline: 0;
     }
 
     &__btn {
         width: 80px;
         height: 80px;
         background-color: #398bff;
-        border: none;
-        outline: 0;
+        cursor: pointer;
 
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
 
         &[disabled] {
             background-color: lighten($color: #398bff, $amount: 20%);
