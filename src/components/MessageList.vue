@@ -114,6 +114,7 @@ export default {
         &__text {
             margin-left: auto;
             background: #e9f5f4;
+            color: #475453;
             border-bottom-right-radius: 0;
             border-bottom-left-radius: 8px;
         }
