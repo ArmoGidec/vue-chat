@@ -11,16 +11,25 @@ import router from './router';
 
 Vue.config.productionTip = false;
 
-Vue.filter('toDateString', value => {
-    const date = new Date(value);
-    const formatter = new Intl.DateTimeFormat('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-
-    return formatter.format(date).replace('г.', '');
+const dateFormatter = new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
 });
+Vue.filter('toDateString', value =>
+    dateFormatter.format(new Date(value)).replace('г.', '')
+);
+
+const dateTimeFormatter = new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+});
+Vue.filter('toDateTimeString', value =>
+    dateTimeFormatter.format(new Date(value)).replace(',', '')
+);
 
 Vue.filter('truncate', (text = '', length = 30) =>
     text.length > length ? text.slice(0, length) + '...' : text

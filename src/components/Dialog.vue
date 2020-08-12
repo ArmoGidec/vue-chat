@@ -2,7 +2,13 @@
     <div class="dialog">
         <Loader size="100" style="margin: auto" v-if="!dialog" />
         <template v-else>
-            <div class="dialog__messages"></div>
+            <div class="dialog__messages">
+                <MessageList
+                    :parts="dialog.parts"
+                    :users="users"
+                    :user="user"
+                />
+            </div>
             <form @submit.prevent="sendMsg" class="dialog__form">
                 <div class="dialog__input-wrapper">
                     <Textarea
@@ -31,7 +37,7 @@ export default {
         sending: false
     }),
     computed: {
-        ...mapGetters(['dialog'])
+        ...mapGetters(['dialog', 'user', 'users'])
     },
     methods: {
         ...mapActions(['getDialog', 'removeDialog']),
@@ -39,7 +45,7 @@ export default {
             this.sending = true;
             await this.getDialog(this.$route.params.dialogId);
             this.sending = false;
-        },
+        }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -54,7 +60,8 @@ export default {
     },
     components: {
         Loader: () => import('./Loader.vue'),
-        Textarea:() => import('./Textarea.vue')
+        MessageList: () => import('./MessageList.vue'),
+        Textarea: () => import('./Textarea.vue')
     }
 };
 </script>
@@ -83,7 +90,8 @@ export default {
         padding-left: 33px;
     }
 
-    &__btn, &__input {
+    &__btn,
+    &__input {
         border: none;
         outline: 0;
     }
