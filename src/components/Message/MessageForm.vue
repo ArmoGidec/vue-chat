@@ -89,6 +89,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-left: auto;
 
         &[disabled] {
             background-color: lighten($color: #398bff, $amount: 20%);
