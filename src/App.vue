@@ -30,7 +30,7 @@ export default {
         this.getUsers();
     },
     components: {
-        ChatList: () => import('./components/ChatList.vue')
+        ChatList: () => import('./components/Chat/ChatList.vue')
     }
 };
 </script>

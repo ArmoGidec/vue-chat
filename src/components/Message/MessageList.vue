@@ -1,19 +1,17 @@
-<template functional>
-    <div class="messages">
+<template>
+    <div class="messages" ref="messagesContainer">
         <ul class="messages__list">
             <li
                 class="messages__item"
                 :class="message.side"
-                v-for="message in $options.getMessages(
-                    props.parts,
-                    props.users,
-                    props.user
-                )"
+                v-for="message in messages"
                 :key="message.id"
             >
                 <div class="message">
-                    <div class="message__text" v-html="$options.linebreaks(message.text)">
-                    </div>
+                    <div
+                        class="message__text"
+                        v-html="linebreaks(message.text)"
+                    ></div>
                     <div class="message__author">
                         {{ message.author.name }}
                     </div>
@@ -43,41 +41,50 @@ export default {
             default: () => ({})
         }
     },
-    getMessages(parts, users, user) {
-        return parts.map(part => {
-            const isUser = user.id === part.author;
-            const author = isUser
-                ? user
-                : users.find(({ id }) => id === part.author);
+    computed: {
+        messages() {
+            return this.parts.map(part => {
+                const isUser = this.user.id === part.author;
+                const author = isUser
+                    ? this.user
+                    : this.users.find(({ id }) => id === part.author);
 
-            return {
-                ...part,
-                author,
-                side: isUser ? 'messages__item--right' : ''
-            };
-        });
+                return {
+                    ...part,
+                    author,
+                    side: isUser ? 'messages__item--right' : ''
+                };
+            });
+        }
     },
-    linebreaks: (text) => text.replace('\n', '<br />')
+    methods: {
+        linebreaks: text => text.replace(/(\n)+/g, '<br />'),
+        scrollToBottom() {
+            let messagesContainer = this.$refs.messagesContainer;
+            if (messagesContainer) {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+    },
+    mounted() {
+        this.scrollToBottom();
+    },
+    updated() {
+        this.scrollToBottom();
+    },
 };
 </script>
 
 <style lang="scss" scoped>
 .messages {
+    display: flex;
     padding: 16px 16px 44px 39px;
-
-    &,
-    &__list {
-        height: 100%;
-    }
 
     &__list {
         list-style: none;
-        margin: 0;
+        margin: auto 0 0;
         padding: 0;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+        width: 100%;
     }
 
     &__item {

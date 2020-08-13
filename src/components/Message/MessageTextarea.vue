@@ -1,17 +1,17 @@
 <template>
     <div
-        class="textarea"
+        class="message-textarea"
         ref="wrapper"
         :style="{ 'padding-top': paddingTop + 'px' }"
         @click="changeFocus"
     >
         <div
-            class="textarea__input"
+            class="message-textarea__input"
             :contenteditable="!$attrs.disabled"
             @input="input"
             ref="inputControl"
         ></div>
-        <div class="textarea__placeholder" v-show="!value">
+        <div class="message-textarea__placeholder" v-show="!value">
             {{ placeholder }}
         </div>
     </div>
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-    name: 'Textarea',
+    name: 'MessageTextarea',
     props: {
         placeholder: {
             type: [String, Number],
@@ -64,6 +64,7 @@ export default {
             if (this.$refs.inputControl.innerText !== this.value) {
                 this.$refs.inputControl.innerText = this.value;
             }
+            this.calcPadding();
         }
     },
     mounted() {
@@ -73,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.textarea {
+.message-textarea {
     height: 100%;
     overflow-y: auto;
     cursor: pointer;

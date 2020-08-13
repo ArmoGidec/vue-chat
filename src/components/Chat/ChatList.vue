@@ -38,7 +38,7 @@ export default {
     },
     components: {
         ChatItem: () => import('./ChatItem.vue'),
-        Loader: () => import('./Loader.vue')
+        Loader: () => import('../Loader.vue')
     }
 };
 </script>

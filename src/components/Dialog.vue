@@ -2,26 +2,23 @@
     <div class="dialog">
         <Loader size="100" style="margin: auto" v-if="!dialog" />
         <template v-else>
-            <div class="dialog__messages">
-                <MessageList
-                    :parts="dialog.parts"
-                    :users="users"
-                    :user="user"
-                />
-            </div>
-            <form @submit.prevent="sendMsg" class="dialog__form">
-                <Textarea
-                    class="dialog__input"
-                    placeholder="Введите текст..."
-                    v-model="form.text"
-                    :valid="form.valid"
-                    :disabled="sending"
-                ></Textarea>
-                <button class="dialog__btn" type="submit" :disabled="sending">
-                    <img src="/icons/vector.png" alt="send" v-if="!sending" />
-                    <Loader v-else size="50" color="white" />
-                </button>
-            </form>
+            <MessageList
+                :parts="dialog.parts"
+                :users="users"
+                :user="user"
+                class="dialog__messages"
+            />
+            <MessageForm
+                class="dialog__form"
+                :valid="valid"
+                :disabled="sending"
+                v-model="form.text"
+                @submit.prevent="sendMsg"
+            >
+                <template v-slot:loader>
+                    <Loader size="50" color="white" />
+                </template>
+            </MessageForm>
         </template>
     </div>
 </template>
@@ -32,22 +29,24 @@ export default {
     name: 'Dialog',
     data: () => ({
         form: {
-            text: '',
-            valid: true
+            text: ''
         },
-        sending: false
+        sending: false,
     }),
     computed: {
-        ...mapGetters(['dialog', 'user', 'users'])
+        ...mapGetters(['dialog', 'user', 'users']),
+        valid() {
+            return this.form.text !== '';
+        }
     },
     methods: {
         ...mapActions(['getDialog', 'removeDialog', 'sendMessage']),
         async sendMsg() {
-            const form = { ...this.form };
-            if (form.text === '') {
-                form.valid = false;
+            if (!this.valid) {
                 return;
             }
+
+            const form = { ...this.form };
             this.sending = true;
             this.form.text = '';
 
@@ -73,8 +72,8 @@ export default {
     },
     components: {
         Loader: () => import('./Loader.vue'),
-        MessageList: () => import('./MessageList.vue'),
-        Textarea: () => import('./Textarea.vue')
+        MessageForm: () => import('./Message/MessageForm.vue'),
+        MessageList: () => import('./Message/MessageList.vue')
     }
 };
 </script>
@@ -91,37 +90,12 @@ export default {
 
     &__form {
         border-top: 1px solid #e9edf2;
-        max-height: 80px;
-    }
-
-    &__messages,
-    &__input {
-        flex: 1;
-    }
-
-    &__input {
-        padding-left: 33px;
-    }
-
-    &__btn,
-    &__input {
-        border: none;
-        outline: 0;
-    }
-
-    &__btn {
-        width: 80px;
         height: 80px;
-        background-color: #398bff;
-        cursor: pointer;
+    }
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &[disabled] {
-            background-color: lighten($color: #398bff, $amount: 20%);
-        }
+    &__messages {
+        height: calc(100% - 80px);
+        overflow-y: auto;
     }
 }
 </style>
