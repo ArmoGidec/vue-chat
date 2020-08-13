@@ -1,5 +1,5 @@
 <template>
-    <form @submit="submit" class="message-form">
+    <form @submit="submit" class="message-form" ref="messageForm">
         <MessageTextarea
             class="message-form__input"
             :class="{ invalid: formInvalid }"
@@ -7,6 +7,7 @@
             :value="value"
             @input="input"
             :disabled="disabled"
+            @area-submit="submit"
         ></MessageTextarea>
         <button class="message-form__btn" type="submit" :disabled="disabled">
             <img src="/icons/vector.png" alt="send" v-if="!disabled" />

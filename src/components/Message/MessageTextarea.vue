@@ -8,6 +8,7 @@
         <div
             class="message-textarea__input"
             :contenteditable="!$attrs.disabled"
+            @keyup.ctrl.enter.prevent="e => $emit('area-submit', e)"
             @input="input"
             ref="inputControl"
         ></div>
