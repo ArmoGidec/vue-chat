@@ -25,6 +25,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+
+import MessageForm from './Message/MessageForm';
+import MessageList from './Message/MessageList';
+
 export default {
     name: 'Dialog',
     data: () => ({
@@ -72,8 +76,8 @@ export default {
     },
     components: {
         Loader: () => import('./Loader.vue'),
-        MessageForm: () => import('./Message/MessageForm.vue'),
-        MessageList: () => import('./Message/MessageList.vue')
+        MessageForm,
+        MessageList
     }
 };
 </script>

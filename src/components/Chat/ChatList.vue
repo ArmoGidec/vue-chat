@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import ChatItem from './ChatItem.vue';
+
 export default {
     name: 'ChatList',
     props: {
@@ -37,8 +39,8 @@ export default {
         });
     },
     components: {
-        ChatItem: () => import('./ChatItem.vue'),
-        Loader: () => import('../Loader.vue')
+        Loader: () => import('../Loader.vue'),
+        ChatItem
     }
 };
 </script>
