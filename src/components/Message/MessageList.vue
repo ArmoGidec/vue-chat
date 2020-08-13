@@ -78,12 +78,11 @@ export default {
 <style lang="scss" scoped>
 .messages {
     display: flex;
-    padding: 16px 16px 44px 39px;
 
     &__list {
         list-style: none;
         margin: auto 0 0;
-        padding: 0;
+        padding: 16px 16px 44px 39px;
         width: 100%;
     }
 
